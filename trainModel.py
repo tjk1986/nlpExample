@@ -56,7 +56,7 @@ def trainModel(model, X_trainBody, X_testBody, X_trainTime, X_testTime, y_train,
     print(scoreWeight)
 
     history = model.fit([X_trainBody, X_trainTime], y_train, epochs=20, validation_data=([X_testBody, X_testTime], y_test),
-                        batch_size=200, sample_weight=sampleWeight, callbacks=[checkpoint, earlystop_callback])
+                        batch_size=2, sample_weight=sampleWeight, callbacks=[checkpoint, earlystop_callback])
 
-    with open('history.json', 'w') as outfile:
-        json.dump(history.history, outfile)
+    with open('history.sav', 'wb') as outfile:
+        pickle.dump(history.history, outfile)

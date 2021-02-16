@@ -2,13 +2,14 @@ from tensorflow.keras.layers import Dense, Embedding, LSTM, Concatenate, Dropout
 from tensorflow.keras.initializers import Constant
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras import Model, Input
+
 import os
 
 
 def customModel(X_trainBody, X_trainTime, y_train, modelsDict, initial_bias):
     # first input
     i1 = Input(shape=(X_trainBody.shape[1],), name='subredditInput')
-    x1 = Embedding(modelsDict['numberOfWords'], 32,
+    x1 = Embedding(modelsDict['numberOfWords'], 9,
                    input_length=X_trainBody.shape[1])(i1)
     x1 = Conv1D(filters=32, kernel_size=3,
                 padding='same', activation='relu')(x1)
@@ -39,8 +40,8 @@ def customModel(X_trainBody, X_trainTime, y_train, modelsDict, initial_bias):
     model = Model(inputs=[i1, i2], outputs=[output_1, output_2])
 
     # save model to png
-    cwd = os.getcwd()
-    filename = os.path.join(cwd, "model.png")
-    plot_model(model, to_file=filename)
+    # cwd = os.getcwd()
+    # filename = os.path.join(cwd, "model.png")
+    # plot_model(model, to_file=filename)
 
     return model

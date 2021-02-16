@@ -17,8 +17,8 @@ from textParser import parser
 
 # initialize dictionary
 modelsDict = {}
-modelsDict['numberOfWords'] = 2000
-modelsDict['maxSequencesLen'] = 50
+modelsDict['numberOfWords'] = 20000
+modelsDict['maxSequencesLen'] = 32
 
 # settings
 lemmatizer = WordNetLemmatizer()
@@ -32,10 +32,12 @@ respString = r.content.decode('utf-8')
 lines = respString.split("\n")
 jsonData = [json.loads(line) for line in lines if line != '']
 
-body = [i['body'] for i in jsonData]
-time = [i['created_utc'] for i in jsonData]
-score = [1 if i['score'] >= 10 else 0 for i in jsonData]
-subreddit = [i['subreddit'] for i in jsonData]
+subredditList = ['politics', 'nfl', 'memes', 'AmItheAsshole', 'teenagers', 'CFB', 'dankmemes', 'modernwarfare', 'pokemontrades']
+
+body = [i['body'] for i in jsonData if i['subreddit'] in subredditList]
+time = [i['created_utc'] for i in jsonData if i['subreddit'] in subredditList]
+score = [1 if i['score'] >= 10 else 0 for i in jsonData if i['subreddit'] in subredditList]
+subreddit = [i['subreddit'] for i in jsonData if i['subreddit'] in subredditList]
 
 # text preprocessing
 body = list(map(parser, body))
@@ -43,8 +45,8 @@ body = [[lemmatizer.lemmatize(w) for w in l if w not in stop_words] for l in bod
 body = [' '.join(filter(None, w)) for w in body]
 
 # data to arrays
-time = np.array([[datetime.fromtimestamp(epoch).weekday(),
-                  datetime.fromtimestamp(epoch).hour] for epoch in time])
+time = np.array([[datetime.fromtimestamp(epoch).hour,
+                  datetime.fromtimestamp(epoch).minute] for epoch in time])
 score = score = np.array(score)
 subreddit = np.array(subreddit)
 body = np.array(body, dtype=object)
