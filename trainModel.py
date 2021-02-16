@@ -33,7 +33,7 @@ def trainModel(model, X_trainBody, X_testBody, X_trainTime, X_testTime, y_train,
                   'subreddit': 'categorical_crossentropy'}
 
     cwd = os.getcwd()
-    filepath = os.path.join(cwd, "models/saved-model-{epoch:02d}.hdf5")
+    filepath = os.path.join(cwd, "saved-model-{epoch:02d}.hdf5")
 
     checkpoint = ModelCheckpoint(filepath, verbose=1,
                                  mode='auto', save_freq='epoch')
